@@ -15,6 +15,8 @@ use helionogueir\typeBoxing\type\json\Decode;
  */
 class Lang {
 
+  const SMARTY_MODIFIER_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'modifier';
+
   private static $locale = 'en-US';
   private static $root = __DIR__;
 
