@@ -18,18 +18,28 @@ class Lang {
   const SMARTY_MODIFIER_PATH = __DIR__ . DIRECTORY_SEPARATOR . 'modifier';
 
   private static $locale = 'en-US';
-  private static $root = __DIR__;
+  private static $root = Array();
 
   public function __construct() {
     return false;
   }
 
-  public static final function configuration(String $locale, String $root = null) {
+  public static final function configuration(String $locale) {
     if (!$locale->isEmpty()) {
       Lang::$locale = "{$locale}";
     }
     if (!$root->isEmpty()) {
       Lang::$root = "{$root}";
+    }
+    return null;
+  }
+
+  public static final function addRoot(String $package, String $path) {
+    if (!$package->isEmpty() && !$path->isEmpty()) {
+      $dirname = realpath($path);
+      if (is_dir($dirname)) {
+        self::$root["{$package}"] = "{$dirname}";
+      }
     }
     return null;
   }
@@ -65,13 +75,20 @@ class Lang {
   private static function loadPackage(String $package) {
     $language = null;
     if (!$package->isEmpty()) {
-      $filename = Lang::$root
-          . DIRECTORY_SEPARATOR . Path::replaceOSSeparator($package)
-          . DIRECTORY_SEPARATOR . 'lang'
-          . DIRECTORY_SEPARATOR . Lang::$locale . ".json";
-      if (file_exists($filename)) {
-        $decode = new Decode(file_get_contents($filename));
-        $language = $decode->getObject();
+      $filename = null;
+      if ($packageData = explode(":", $package)) {
+        if (!empty($packageData[0])) {
+          $filename .= self::$root[$packageData[0]];
+        }
+        if (!empty($packageData[1])) {
+          $filename .= DIRECTORY_SEPARATOR . $packageData[1];
+        }
+        $filename .= DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . Lang::$locale . ".json";
+        if (file_exists($filename)) {
+          $filename = Path::replaceOSSeparator(new String($filename));
+          $decode = new Decode(file_get_contents($filename));
+          $language = $decode->getObject();
+        }
       }
     }
     return $language;
