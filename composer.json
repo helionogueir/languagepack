@@ -1,21 +1,16 @@
 {
     "name": "helionogueir/languagepack",
-    "type": "tool",
-    "description": "LanguagePack - Library of control for language pack",
+    "description": "LanguagePack - Library of control for language package",
     "homepage": "http://www.qalt-ed.com.br/",
     "license": "MIT",
-    "keywords": [
-        "tool",
-        "PHP",
-        "La",
-        "Language",
-        "Lang",
-        "LanguagePack"
-    ],
+    "keywords": ["tool", "php", "language", "lang", "locate", "languagepack", "package"],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.6",
         "helionogueir/typeboxing": ">=1.0.0",
         "helionogueir/foldercreator": ">=1.0.0"
+    },
+    "autoload": {
+        "files": ["core/autoload/register.inc"]
     },
     "authors": [
         {
@@ -23,8 +18,5 @@
             "email": "helio.nogueir@gmail.com",
             "role": "Arquitect, Tester, Analyst and Developer"
         }
-    ],
-    "autoload": {
-        "files": ["core/autoload/register.inc"]
-    }
+    ]
 }

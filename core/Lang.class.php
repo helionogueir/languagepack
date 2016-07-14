@@ -5,9 +5,10 @@ namespace helionogueir\languagepack;
 use helionogueir\typeBoxing\type\String;
 use helionogueir\foldercreator\tool\Path;
 use helionogueir\typeBoxing\type\json\Decode;
+use helionogueir\filecreator\data\ReplaceText;
 
 /**
- * Lang pattern:
+ * Lang control:
  * - Control language packages;
  *
  * @author Helio Nogueira <helio.nogueir@gmail.com>
@@ -20,10 +21,21 @@ class Lang {
   private static $locale = 'en-US';
   private static $root = Array();
 
+  /**
+   * Block construct the class, because this class is static
+   * @return false
+   */
   public function __construct() {
     return false;
   }
 
+  /**
+   * Configuration lang:
+   * - Set locate
+   * 
+   * @param helionogueir\typeBoxing\type\String $locale Define locate of language
+   * @return null
+   */
   public static final function configuration(String $locale) {
     if (!$locale->isEmpty()) {
       Lang::$locale = "{$locale}";
@@ -34,6 +46,14 @@ class Lang {
     return null;
   }
 
+  /**
+   * Add root finder:
+   * - Define root of find of packages
+   * 
+   * @param helionogueir\typeBoxing\type\String $package Define root package of language
+   * @param helionogueir\typeBoxing\type\String $path Define path of root package of langauge
+   * @return null
+   */
   public static final function addRoot(String $package, String $path) {
     if (!$package->isEmpty() && !$path->isEmpty()) {
       $dirname = realpath($path);
