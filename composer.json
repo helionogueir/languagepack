@@ -6,8 +6,7 @@
     "keywords": ["tool", "php", "language", "lang", "locate", "languagepack", "package"],
     "require": {
         "php": ">=7.1",
-        "helionogueir/typeboxing": "=1.1.0",
-        "helionogueir/foldercreator": "=1.1.0"
+        "helionogueir/foldercreator": "=v1.1.0"
     },
     "autoload": {
         "files": ["core/autoload/register.inc"]
