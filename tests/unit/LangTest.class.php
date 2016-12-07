@@ -1,7 +1,5 @@
 <?php
 
-namespace helionogueir\languagepack\tests\unit;
-
 use PHPUnit\Framework\TestCase;
 use helionogueir\languagepack\Lang;
 
