@@ -3,10 +3,11 @@
     "description": "LanguagePack - Library of control for language package",
     "homepage": "https://github.com/helionogueir",
     "license": "MIT",
-    "keywords": ["tool", "php", "language", "lang", "locate", "languagepack", "package"],
+    "keywords": ["library", "tool", "language", "lang", "locate", "package", "transalation"],
     "require": {
-        "php": ">=7.1",
-        "helionogueir/foldercreator": "=v1.1.0"
+        "php": ">=7.0",
+        "helionogueir/foldercreator": "=v1.1.0",
+        "helionogueir/filecreator": "=v1.1.0"
     },
     "autoload": {
         "files": ["core/autoload/register.inc"]

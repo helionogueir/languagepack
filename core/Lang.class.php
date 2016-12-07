@@ -2,78 +2,64 @@
 
 namespace helionogueir\languagepack;
 
+use stdClass;
 use SplFileObject;
 use helionogueir\foldercreator\tool\Path;
+use helionogueir\filecreator\data\ReplaceText;
 
 /**
- * Lang control:
- * - Control language packages;
- *
+ * - Manipulate language package
  * @author Helio Nogueira <helio.nogueir@gmail.com>
- * @version v1.0.0
+ * @version v1.1.0
  */
-class Lang {
+abstract class Lang {
 
+  /**
+   * - Define standard locate
+   */
   const STANDARD_LOCALE = 'en-US';
 
   private static $locale = Lang::STANDARD_LOCALE;
   private static $root = Array();
 
   /**
-   * Block construct the class, because this class is static
-   * @return false
-   */
-  public function __construct() {
-    return false;
-  }
-
-  /**
-   * Configuration lang:
-   * - Set locate
-   * 
-   * @param string $locale Define locate of language
+   * - Define configuration locate of language
+   * @param string $locale Locate name of language
    * @return null
    */
   public static final function configuration(string $locale) {
     if (!empty($locale)) {
-      Lang::$locale = "{$locale}";
+      Lang::$locale = $locale;
     } else {
       Lang::$locale = Lang::STANDARD_LOCALE;
-    }
-    if (!empty($root)) {
-      Lang::$root = "{$root}";
     }
     return null;
   }
 
   /**
-   * Add root finder:
    * - Define root of find of packages
-   * 
-   * @param string $package Define root package of language
-   * @param string $path Define path of root package of langauge
+   * @param string $package Root name of package language
+   * @param string $path Pathname of package language
    * @return null
    */
   public static final function addRoot(string $package, string $path) {
     if (!empty($package) && !empty($path)) {
-      $dirname = realpath($path);
+      $dirname = realpath(Path::replaceOSSeparator($path));
       if (is_dir($dirname)) {
-        Lang::$root["{$package}"] = "{$dirname}";
+        Lang::$root[$package] = $dirname;
       }
     }
     return null;
   }
 
   /**
-   * Get language:
-   * - Identify lang and package and return text;
-   * 
-   * @param string $identify Identify of language
-   * @param string $package Package of language
-   * @param Array $data Data repalce of language
-   * @return string Return text langauge
+   * - Identify TAG and package, and return text
+   * @param string $identify TAG identify language
+   * @param string $package Package language
+   * @param Array $data Data repalce language
+   * @return null
    */
-  public static final function get(string $identify, string $package, Array $data = null) {
+  public static final function get(string $identify, string $package, Array $data = null): string {
     $text = $identify;
     if (!empty($identify)) {
       if ($language = Lang::loadPackage($package)) {
@@ -86,14 +72,12 @@ class Lang {
   }
 
   /**
-   * Load package:
-   * - Identify and load package language;
-   * 
-   * @param string $package Package of language
-   * @return stdClass Return package of language
+   * - Identify package and load package language
+   * @param string $package Path name package language 
+   * @return stdClass Object with language translate
    */
-  private static function loadPackage(string $package) {
-    $language = null;
+  private static function loadPackage(string $package): stdClass {
+    $language = new stdClass();
     if (!empty($package)) {
       $filename = null;
       if ($packageData = explode(":", $package)) {
@@ -107,39 +91,39 @@ class Lang {
         if (file_exists($pathaname)) {
           $pathaname = Path::replaceOSSeparator($pathaname);
           $decode = json_decode(file_get_contents((new SplFileObject($pathaname, "r"))->getPathname()));
-          $language = (JSON_ERROR_NONE == json_last_error()) ? $decode : null;
+          $language = (JSON_ERROR_NONE == json_last_error()) ? $decode : $language;
         }
       }
     }
     return $language;
   }
 
-  private static function selectPackage(string $filename) {
-    $pathname = $filename . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . Lang::$locale . ".json";
-    if (file_exists($pathname)) {
-      $filename = $pathname;
+  /**
+   * - Select package defined in configuration, case not exist package select standard package
+   * @param string $pathname Pathname of package language
+   * @return sting Pathname of package language
+   */
+  private static function selectPackage(string $pathname): string {
+    $filename = $pathname . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . Lang::$locale . ".json";
+    if (file_exists($filename)) {
+      $pathname = $filename;
     } else {
-      $filename = $filename . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . Lang::STANDARD_LOCALE . ".json";
+      $pathname .= DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . Lang::STANDARD_LOCALE . ".json";
     }
-    return $filename;
+    return $pathname;
   }
 
   /**
-   * Relace data:
-   * - Replace data in language;
-   * 
-   * @param string $text Text language
-   * @param string $package Package of language
-   * @param Array $data Data repalce of language
-   * @return string Return text langauge
+   * - Replace TAGs in text
+   * @param string $text Text with TAG(s)
+   * @param string $data TAG(s) value(s)
+   * @return sting Text TAG(s) replaced
    */
-  private static function replace(string $text, Array $data = null) {
+  private static function replace(string $text, Array $data = null): string {
     if (!empty($text) && count($data)) {
-      $metaText = $text;
-      foreach ($data as $key => $value) {
-        $metaText = preg_replace("#(\{data\:{$key}\})#si", $value, $metaText);
+      if ($metaText = (new ReplaceText())->replace($text, $data)) {
+        $text = $metaText;
       }
-      $text = $metaText;
     }
     return $text;
   }

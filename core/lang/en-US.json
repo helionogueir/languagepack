@@ -1,4 +1,3 @@
 {
-    "languagepack:title": "LanguagePack",
-    "languagepack:desc": "LanguagePack - Library of control for language pack"
+    "languagepack:test:get": "Language Pack Test {data:method}"
 }
