@@ -1,6 +1,6 @@
 {
     "name": "helionogueir/languagepack",
-    "description": "LanguagePack - Library of control for language package",
+    "description": "A libraty to manipulate language package",
     "homepage": "https://github.com/helionogueir",
     "license": "MIT",
     "keywords": ["library", "tool", "language", "lang", "locate", "package", "transalation"],
