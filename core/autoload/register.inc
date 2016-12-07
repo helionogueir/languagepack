@@ -1,11 +1,13 @@
 <?php
 
 /**
- * - Autoload pattern
+ * Autoload:
+ * - Pattern of autoload of tool
+ *
  * @author Helio Nogueira <helio.nogueir@gmail.com>
- * @version v1.1.0
+ * @version v1.0.0
  */
-spl_autoload_register(function(string $classname) {
+spl_autoload_register(function($classname) {
   $pattern = "/^(helionogueir\\\\languagepack)\\\\(.*)$/";
   if (preg_match($pattern, $classname)) {
     $classname = preg_replace($pattern, '$2', $classname);
@@ -14,5 +16,5 @@ spl_autoload_register(function(string $classname) {
       require_once($filename);
     }
   }
-  return true;
+  return null;
 });

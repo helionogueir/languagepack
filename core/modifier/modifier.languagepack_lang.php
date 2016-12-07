@@ -14,6 +14,11 @@
  * @return string
  */
 function smarty_modifier_languagepack_lang($identify, $package, Array $data = array()) {
-  require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . "autoload.php";
-  return \helionogueir\languagepack\Lang::get($identify, $package, $data);
+  $root = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+  require_once $root
+      . DIRECTORY_SEPARATOR . 'core'
+      . DIRECTORY_SEPARATOR . 'environment'
+      . DIRECTORY_SEPARATOR . 'Autoload.class.php';
+  core\environment\Autoload::make($root);
+  return \helionogueir\languagepack\Lang::get(new helionogueir\typeBoxing\type\String($identify), new helionogueir\typeBoxing\type\String($package), $data);
 }
